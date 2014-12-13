@@ -25,7 +25,7 @@ use_fit <- raw_int[raw_complete,]
 
 First, we want to know how many steps are taken each day. Let's look at a histogram of the data:
 
-```{r}
+```{r means_1}
 ##need to find the mean steps taken by each day: 
 means_complete <- aggregate(use_fit$steps, by = list(use_fit$date), mean)
 hist(means_complete$x, main = "Average Steps by Day", xlab = "Mean steps by day")
@@ -43,7 +43,7 @@ The mean number of steps per day is `r mean_total` and the median is `r median_c
 
 In addition, we want to look at the average daily activity by 5 minute interval.
 
-```{r}
+```{r daily activity}
 #similar to above, we now want to know steps by interval across all the days.
 daily_activity <- aggregate(use_fit$steps, by = list(use_fit$interval), mean)
 plot(daily_activity$x, daily_activity$interval, type = "l", ylab = "Average Steps", xlab = "5min interval index from 12:00am to 11:55pm")
@@ -68,7 +68,7 @@ Many values are missing in this data set. Total number of rows with missing valu
 
 This time, we'll be replacing all the missing data with the mean number of steps taken during that interval across the rest of the days, and see if this changes the histogram of average daily steps.
 
-```{r}
+```{r means_filled_in}
 steps_by_interval <- aggregate(steps ~ interval, data = raw_int, mean)
 raw_int$avg_by_interval <- rep(steps_by_interval$steps, 61)
 #61 is the number of days; or the number of times each of the intervals repeats
@@ -85,7 +85,7 @@ The new mean number of steps daily is: `r mean_filled_in` and the median is: `r 
 
 We also want to know what's different between the weekdays and weekends.
 
-```{r}
+```{r weekdays_v_weekends}
 ##using weekdays() to assign days of the week to each data
 raw_int$weekday <- weekdays(raw_int$date)
 raw_int$weekday_factor <- ifelse(raw_int$weekday %in% c("Saturday", "Sunday"), "Weekend", "Weekday")
